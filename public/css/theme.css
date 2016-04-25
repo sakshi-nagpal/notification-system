@@ -1,0 +1,24 @@
+.main-container{
+    background:#fff;
+    width:100%;
+    padding: 0 40px;  
+}
+.main-container .caret{
+    margin-left: 16px;
+}
+.main-container .column{
+    width:  49%;
+    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+}
+.main-container .column .noti_heading{
+    margin-top: 0;
+}
+.main-container .subscription{
+    padding: 10px 0;
+}
+.main-container .subscription b{
+    color: darkseagreen;
+    
+}

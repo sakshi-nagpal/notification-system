@@ -1,0 +1,16 @@
+From the problem, the following conclusions has been drawn:
+
+1. To notify the users as per their characters subscription, we need following collections:
+    a. Users : Users that subscribe particular character.
+    b. Characters : Gossip Girl characters
+    c. Subscription : Its keeps the subscription type of users
+    d. Activities : it is a capped collection contains data of user subscribed activities
+
+2. MongoDB will automatically close a cursor when the client has exhausted all results in the cursor.
+   So using a tailable cursor for Activities collection
+
+3. Application Flow
+    a. Iniatially all the Activities present have field {"read": false}.
+    b. After selection any user from the dropdown, its corresponding Activities field "read" has been updated to false.
+    c. Only new notifications will be seen on view.
+    d. After every 20 secs new notifications are added for each User.

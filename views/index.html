@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Notification</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/theme.css">
+</head>
+<body>
+<div class="main-container">
+    <h2>Notification System Example</h2>
+    <div class="column">
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                 ~ Select User ~
+                <span class="caret"></span>
+            </button>
+        <ul id="users" class="dropdown-menu" aria-labelledby="dropdownOptions"></ul>
+        </div>
+        <div class="subscription"></div>
+    </div>
+    <div class="column">
+        <h3 class="noti_heading">Unread Notification of subscribed character</h3>
+        <div class="notificationContainer"></div>
+    </div>  
+    
+    
+</div>
+
+</body>
+<script type="text/javascript" src="./js/socket.io.js"></script>
+<script type="text/javascript" src="./js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+
+<script>
+    getUsers();
+    var socket = io.connect();
+
+    socket.on('subscription', function (subscriptionObj) {
+        document.getElementsByClassName("subscription")[0].innerHTML = 'User <b>'+ subscriptionObj.subs.displayName +'</b> has subscribed to <b>'+ subscriptionObj.subs.subscriptions[0].subscriptionType.name + '</b> of Gossip girl Character <b>' + subscriptionObj.subs.subscriptions[0].characterId.name + '</b>';
+        socket.emit('notification', {typeId:subscriptionObj.subs.subscriptions[0].subscriptionType._id, characterId:subscriptionObj.subs.subscriptions[0].characterId._id})
+    });
+
+    socket.on('notify', function(activity) {
+        var node = document.createElement("div");
+        var textNode = document.createTextNode(activity.obj.desc);
+        node.appendChild(textNode);
+        document.getElementsByClassName("notificationContainer")[0].appendChild(node);
+    });
+
+    function getUsers() {
+        $.ajax({
+            url: '/users',
+            success: function(users){
+                createDropdownOptions(users);
+            },
+            error: function(err) {
+                console.info('error getting in users : '+ err);
+            }
+        });
+    }
+
+    function createDropdownOptions(usersArr) {
+        var options = '';
+        for(var i = 0; i < usersArr.length; i++) {
+            options = options + '<li><a href="#" onclick="getSubscription(\'' + usersArr[i]._id + '\')">'+ usersArr[i].displayName +'</a></li>';
+        }
+        document.getElementById('users').innerHTML = options;
+    }
+
+    function getSubscription(userId) {
+        document.getElementsByClassName("notificationContainer")[0].innerHTML = '';
+        socket.emit('subscription', {user: userId});
+    }
+</script>
+</html>

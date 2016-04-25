@@ -16,7 +16,7 @@ It requires the following prerequisites:
 ## Getting started
 
 - Download the (source) zip file to local system and Extract it.
-- Open the **notification** folder.
+- Open the **notification-system** folder.
 - Create a **data/db** folder in windows C: drive and copy the content of db_content folder ie existing database in data/db folder.
 - To start mongodb : open cmd, type **mongod**.
 
